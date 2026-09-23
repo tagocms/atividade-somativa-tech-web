@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Login, Cadastro, Principal } from './screens'
 import { AuthenticationContext } from "./context/AuthenticationContext";
 
@@ -22,24 +22,29 @@ export default class AppNavigation extends React.Component {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={
-                            this.isAuthenticated
-                            ? <Principal />
-                            : <Login />
+                            this.state.isAuthenticated
+                            ? <Navigate to="/principal"/>
+                            : <Navigate to="/login"/>
                         }/>
                         <Route path="/login" element={
-                            this.isAuthenticated
-                            ? <Principal />
+                            this.state.isAuthenticated
+                            ? <Navigate to="/principal"/>
                             : <Login />
                         }/>
                         <Route path="/cadastro" element={
-                            this.isAuthenticated
-                            ? <Principal />
+                            this.state.isAuthenticated
+                            ? <Navigate to="/principal"/>
                             : <Cadastro />
                         }/>
-                        <Route path="/*" element={
-                            this.isAuthenticated
+                        <Route path="/principal" element={
+                            this.state.isAuthenticated
                             ? <Principal />
-                            : <Login />
+                            : <Navigate to="/login"/>
+                        }/>
+                        <Route path="/*" element={
+                            this.state.isAuthenticated
+                            ? <Navigate to="/principal"/>
+                            : <Navigate to="/login"/>
                         }/>
                     </Routes>
                 </BrowserRouter>
