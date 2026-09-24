@@ -15,8 +15,7 @@ export default class AppNavigation extends React.Component {
     }
 
     componentDidMount() {
-        this.unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
-            console.log(user);
+        this.unsubscribeToFirebaseAuth = firebaseAuth.onAuthStateChanged(async (user) => {
             if (user) {
                 this.setIsAuthenticated(true);
             } else {
@@ -27,7 +26,7 @@ export default class AppNavigation extends React.Component {
     }
 
     componentWillUnmount() {
-        this.unsubscribe();
+        this.unsubscribeToFirebaseAuth();
     }
 
     setIsAuthenticated(value) {

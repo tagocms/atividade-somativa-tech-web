@@ -14,5 +14,5 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth(firebaseApp);
-export const firebaseFirestore = getFirestore(firebaseApp, {});
+export const firebaseFirestore = getFirestore(firebaseApp);
 export const usersCollectionReference = collection(firebaseFirestore, "users");
