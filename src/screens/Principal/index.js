@@ -68,6 +68,11 @@ export class Principal extends React.Component {
                         <div className="message-container">{this.state.errorMessage}</div>
                     </div>
                 }
+                {this.state.isLoading &&
+                    <div className="progress-container">
+                        <progress value={null}/>
+                    </div>
+                }
             </div>
         )
     }

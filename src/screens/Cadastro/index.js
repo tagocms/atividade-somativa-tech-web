@@ -14,12 +14,14 @@ export class Cadastro extends React.Component {
                 name: "",
                 surname: "",
                 birthDate: new Date(),
-                errorMessage: ""
+                errorMessage: "",
+                isResponseLoading: false
             };
             this.createUser = this.createUser.bind(this);
         }
     
         async createUser(e, context) {
+            e.preventDefault();
             if (!this.state.email.length > 0 
                 || !this.state.password > 0
                 || !this.state.name > 0
@@ -30,7 +32,9 @@ export class Cadastro extends React.Component {
                 return;
             }
 
+            this.setState({isResponseLoading: true});
             try {
+                this.setState({errorMessage: ""});
                 const response = await createUserWithEmailAndPassword(firebaseAuth, this.state.email, this.state.password);
                 await setDoc(doc(usersCollectionReference, response.user.uid), {
                     name: this.state.name,
@@ -41,8 +45,10 @@ export class Cadastro extends React.Component {
                 console.log("Error signing up: " + e);
                 this.setState({errorMessage: "Erro ao cadastrar. Tente novamente."});
             }
+            this.setState({isResponseLoading: false});
             
         }
+        
         render() {
             return (
                 <AuthenticationContext.Consumer>
@@ -66,6 +72,11 @@ export class Cadastro extends React.Component {
                                 </SignUpInForm>
                                 {this.state.errorMessage.length > 0 &&
                                     <div className="message-container">{this.state.errorMessage}</div>
+                                }
+                                {this.state.isResponseLoading &&
+                                    <div className="progress-container">
+                                        <progress value={null}/>
+                                    </div>
                                 }
                             </div>
                         )

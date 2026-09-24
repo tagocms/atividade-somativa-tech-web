@@ -23,7 +23,7 @@ export class SignUpInForm extends React.Component {
                         <Link to="/cadastro">Cadastro</Link>
                     </div>
                 </div>
-            <form action={(e) => this.action(e)}>
+            <form onSubmit={(e) => this.action(e)}>
                 {this.children}
                 <input type="email" placeholder="E-mail" onChange={(e) => this.setEmail(e.target.value)} />
                 <input type="password" placeholder="Senha" onChange={(e) => this.setPassword(e.target.value)} />

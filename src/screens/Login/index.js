@@ -10,12 +10,14 @@ export class Login extends React.Component {
         this.state = {
             email: "",
             password: "",
-            errorMessage: ""
+            errorMessage: "",
+            isResponseLoading: false
         };
         this.authenticateUser = this.authenticateUser.bind(this);
     }
 
     async authenticateUser(e, context) {
+        e.preventDefault();
         if (!this.state.email.length > 0
             || !this.state.password.length > 0
         ) {
@@ -23,15 +25,17 @@ export class Login extends React.Component {
             return;
         }
 
+        this.setState({isResponseLoading: true});
         try {
+            this.setState({errorMessage: ""});
             await signInWithEmailAndPassword(firebaseAuth, this.state.email, this.state.password);
         } catch (e) {
             console.log("Error loging in: " + e);
-            this.setState({errorMessage: "Erro ao entrar na conta. Tente novamente."});
+            this.setState({errorMessage: "Usuário e/ou senha inválidos."});
         }
-
-        
+        this.setState({isResponseLoading: false});
     }
+    
     render() {
         return (
             <AuthenticationContext.Consumer>
@@ -48,6 +52,11 @@ export class Login extends React.Component {
                             />
                             {this.state.errorMessage.length > 0 &&
                                 <div className="message-container">{this.state.errorMessage}</div>
+                            }
+                            {this.state.isResponseLoading &&
+                                <div className="progress-container">
+                                    <progress value={null}/>
+                                </div>
                             }
                         </div>
                     )
