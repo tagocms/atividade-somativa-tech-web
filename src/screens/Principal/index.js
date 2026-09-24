@@ -54,8 +54,8 @@ export class Principal extends React.Component {
             <div>
                 {!this.state.isLoading &&
                     <div>
-                        <div className="principal-header">
-                            <h1>Principal</h1>
+                        <div className="header">
+                            <h3>Principal</h3>
                             <button onClick={this.logout}>Sair</button>
                         </div>
                         

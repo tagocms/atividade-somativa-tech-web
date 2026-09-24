@@ -15,17 +15,21 @@ export class SignUpInForm extends React.Component {
 
     render() {
         return(
-            <form action={(e) => this.action(e)}>
-                <div className="form-header">
+            <div>
+                <div className="header">
                     <h3>{this.type}</h3>
-                    <Link to="/login">Login</Link>
-                    <Link to="/cadastro">Cadastro</Link>
+                    <div className="link-group">
+                        <Link to="/login">Login</Link>
+                        <Link to="/cadastro">Cadastro</Link>
+                    </div>
                 </div>
+            <form action={(e) => this.action(e)}>
                 {this.children}
                 <input type="email" placeholder="E-mail" onChange={(e) => this.setEmail(e.target.value)} />
                 <input type="password" placeholder="Senha" onChange={(e) => this.setPassword(e.target.value)} />
                 <button type="submit">{this.type === "Login" ? "Acessar página principal" : "Cadastrar e acessar página principal"}</button>
             </form>
+            </div>
         );
     }
 }
