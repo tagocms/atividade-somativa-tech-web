@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Login, Cadastro, Principal } from './screens'
 import { AuthenticationContext } from "./context/AuthenticationContext";
+import { firebaseAuth } from "./configuration/firebase";
 
 export default class AppNavigation extends React.Component {
     constructor(props) {
@@ -10,6 +11,21 @@ export default class AppNavigation extends React.Component {
             isAuthenticated: false
         };
         this.setIsAuthenticated = this.setIsAuthenticated.bind(this);
+    }
+
+    componentDidMount() {
+        this.unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
+            console.log(user);
+            if (user) {
+                this.setIsAuthenticated(true);
+            } else {
+                this.setIsAuthenticated(false);
+            }
+        })
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe();
     }
 
     setIsAuthenticated(value) {
@@ -49,6 +65,6 @@ export default class AppNavigation extends React.Component {
                     </Routes>
                 </BrowserRouter>
             </ AuthenticationContext.Provider>
-        )
+        );
     }
 }
