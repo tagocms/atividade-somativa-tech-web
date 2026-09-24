@@ -8,7 +8,8 @@ export default class AppNavigation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isAuthenticated: false
+            isAuthenticated: false,
+            isLoading: true
         };
         this.setIsAuthenticated = this.setIsAuthenticated.bind(this);
     }
@@ -21,6 +22,7 @@ export default class AppNavigation extends React.Component {
             } else {
                 this.setIsAuthenticated(false);
             }
+            this.setState({isLoading: false});
         })
     }
 
@@ -35,35 +37,40 @@ export default class AppNavigation extends React.Component {
     render() {
         return (
             <AuthenticationContext.Provider value={{isAuthenticated: this.state.isAuthenticated, setIsAuthenticated: this.setIsAuthenticated}}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={
-                            this.state.isAuthenticated
-                            ? <Navigate to="/principal"/>
-                            : <Navigate to="/login"/>
-                        }/>
-                        <Route path="/login" element={
-                            this.state.isAuthenticated
-                            ? <Navigate to="/principal"/>
-                            : <Login />
-                        }/>
-                        <Route path="/cadastro" element={
-                            this.state.isAuthenticated
-                            ? <Navigate to="/principal"/>
-                            : <Cadastro />
-                        }/>
-                        <Route path="/principal" element={
-                            this.state.isAuthenticated
-                            ? <Principal />
-                            : <Navigate to="/login"/>
-                        }/>
-                        <Route path="/*" element={
-                            this.state.isAuthenticated
-                            ? <Navigate to="/principal"/>
-                            : <Navigate to="/login"/>
-                        }/>
-                    </Routes>
-                </BrowserRouter>
+                {this.state.isLoading &&
+                    <></>
+                }
+                {!this.state.isLoading &&
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={
+                                this.state.isAuthenticated
+                                ? <Navigate to="/principal"/>
+                                : <Navigate to="/login"/>
+                            }/>
+                            <Route path="/login" element={
+                                this.state.isAuthenticated
+                                ? <Navigate to="/principal"/>
+                                : <Login />
+                            }/>
+                            <Route path="/cadastro" element={
+                                this.state.isAuthenticated
+                                ? <Navigate to="/principal"/>
+                                : <Cadastro />
+                            }/>
+                            <Route path="/principal" element={
+                                this.state.isAuthenticated
+                                ? <Principal />
+                                : <Navigate to="/login"/>
+                            }/>
+                            <Route path="/*" element={
+                                this.state.isAuthenticated
+                                ? <Navigate to="/principal"/>
+                                : <Navigate to="/login"/>
+                            }/>
+                        </Routes>
+                    </BrowserRouter>
+                }
             </ AuthenticationContext.Provider>
         );
     }
