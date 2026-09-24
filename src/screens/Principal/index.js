@@ -1,6 +1,7 @@
 import { doc, getDoc } from "firebase/firestore";
 import React from "react";
 import { firebaseAuth, usersCollectionReference } from "../../configuration/firebase";
+import { signOut } from "firebase/auth";
 
 export class Principal extends React.Component {
     constructor(props) {
@@ -13,19 +14,21 @@ export class Principal extends React.Component {
             errorMessage: "",
             isLoading: true
         };
+
+        this.logout = this.logout.bind(this);
     }
 
     async componentDidMount() {
         try {
             const response = await getDoc(doc(usersCollectionReference, firebaseAuth.currentUser.uid));
             if (response.exists()) {
-                const data = response.data;
+                const data = response.data();
 
                 this.setState({
                     email: firebaseAuth.currentUser.email,
                     name: data.name,
                     surname: data.surname,
-                    birthDate: data.birthDate,
+                    birthDate: data.birthDate.toDate(),
                     isLoading: false
                 });
             } else {
@@ -37,17 +40,32 @@ export class Principal extends React.Component {
         }
     }
 
+    async logout() {
+        try {
+            await signOut(firebaseAuth);
+        } catch (e) {
+            console.log("Error signing out: " + e);
+            this.setState({errorMessage: "Erro ao sair da conta. Tente novamente."});
+        }
+    }
+
     render() {
         return (
             <div>
                 {!this.state.isLoading &&
                     <div>
-                        <h1>Principal</h1>
+                        <div className="principal-header">
+                            <h1>Principal</h1>
+                            <button onClick={this.logout}>Sair</button>
+                        </div>
+                        
                         <ul>
-                            <li>{this.state.email}</li>
-                            <li>{this.state.name} {this.state.surname}</li>
-                            <li>{this.state.birthDate}</li>
+                            <li>E-mail: {this.state.email}</li>
+                            <li>Nome: {this.state.name} {this.state.surname}</li>
+                            <li>Data de nascimento: {this.state.birthDate.toLocaleDateString()}</li>
                         </ul>
+
+                        <div className="message-container">{this.state.errorMessage}</div>
                     </div>
                 }
             </div>

@@ -59,7 +59,10 @@ export class Cadastro extends React.Component {
                                 >
                                     <input type="text" placeholder="Primeiro nome" onChange={(e) => this.setState({name: e.target.value})}/>
                                     <input type="surname" placeholder="Sobrenome" onChange={(e) => this.setState({surname: e.target.value})}/>
-                                    <input type="date" onChange={(e) => this.setState({birthDate: e.target.valueAsDate})}/>
+                                    <input type="date" onChange={(e) => {
+                                        const [year, month, day] = e.target.value.split("-").map(Number);
+                                        this.setState({birthDate: new Date(year, month - 1, day)});
+                                    }}/>
                                 </SignUpInForm>
                                 {this.state.errorMessage.length > 0 &&
                                     <div className="message-container">{this.state.errorMessage}</div>
